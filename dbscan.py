@@ -128,11 +128,11 @@ def dbscan2(data, e, m):
 
 
 if __name__ == '__main__':
-    start = time.time()
+    start = time.clock()
     dataSet = loadDataSet('788points')
     clusterResult, clusterNum = dbscan(dataSet, 2, 15)
     # print(clusterResult)
     # dbscan2(dataSet, 2, 15)
-    end = time.time()
+    end = time.clock()
     plotFeature(dataSet, clusterResult, clusterNum)
     print('finish all in {} seconds'.format(str(end - start)))
