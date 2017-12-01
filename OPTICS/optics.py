@@ -10,8 +10,8 @@ class Cluster:
     def centroid(self):
         """calculate the centroid for the cluster
         """
-        return Point(sum([p.latitude for p in self.points])/len(self.points),
-            sum([p.longitude for p in self.points])/len(self.points))
+        return Point(sum([p.latitude for p in self.points]) / len(self.points),
+                     sum([p.longitude for p in self.points]) / len(self.points))
 
     def region(self):
         """calculate the region (centroid, bounding radius) for the cluster
@@ -40,7 +40,8 @@ class Optics:
     def core_distance(self, point, neighbors):
         """distance from a point to its nth neighbor (n = min_cluser_size)
         """
-        if point.cd is not None: return point.cd
+        if point.cd is not None:
+            return point.cd
         if len(neighbors) >= self.min_cluster_size - 1:
             sortedneighbors = sorted([n.distance(point) for n in neighbors])
             point.cd = sortedneighbors[self.min_cluster_size - 2]
@@ -50,7 +51,7 @@ class Optics:
         """neighbors for a point within max_radius
         """
         return [p for p in self.points if p is not point and
-            p.distance(point) <= self.max_radius]
+                p.distance(point) <= self.max_radius]
 
     def processed(self, point):
         """mark a point as processed
@@ -120,7 +121,9 @@ class Optics:
                 separators.append(this_i)
 
         separators.append(len(self.ordered))
-
+        print("****************separators****************")
+        print(separators)
+        print("******************************************")
         for i in range(len(separators) - 1):
             start = separators[i]
             end = separators[i + 1]
@@ -130,17 +133,19 @@ class Optics:
         return clusters
 
 
-points = [
-    Point(37.769006, -122.429299), # cluster #1
-    Point(37.769044, -122.429130), # cluster #1
-    Point(37.768775, -122.429092), # cluster #1
-    Point(37.776299, -122.424249), # cluster #2
-    Point(37.776265, -122.424657), # cluster #2
-]
+if __name__ == "__main__":
+    points = [
+        Point(37.769006, -122.429299),  # cluster #1
+        Point(37.769044, -122.429130),  # cluster #1
+        Point(37.768775, -122.429092),  # cluster #1
+        Point(37.776299, -122.424249),  # cluster #2
+        Point(37.776265, -122.424657),  # cluster #2
+    ]
 
-optics = Optics(points, 100, 2) # 100m radius for neighbor consideration, cluster size >= 2 points
-optics.run()                    # run the algorithm
-clusters = optics.cluster(50)   # 50m threshold for clustering
+    # 100m radius for neighbor consideration, cluster size >= 2 points
+    optics = Optics(points, 100, 2)
+    optics.run()                    # run the algorithm
+    clusters = optics.cluster(50)   # 50m threshold for clustering
 
-for cluster in clusters:
-    print cluster.points
+    for cluster in clusters:
+        print(cluster.points)
